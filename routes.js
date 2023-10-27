@@ -3,6 +3,7 @@ import { helloWorldController } from './controllers/testController.js';
 import * as userController from './controllers/user/userController.js';
 import * as caregiverController from './controllers/caregiver/caregiverController.js';
 import * as orderController from './controllers/order/orderController.js';
+import * as reviewController from './controllers/review/reviewController.js';
 
 const router  = Router();
 router.get('/', helloWorldController);
@@ -18,4 +19,5 @@ router.get('/order/:order_id', orderController.getOneOrderController);
 router.post('/order', orderController.createOrderController);
 router.put('/order/:order_id', orderController.updateOrderController);
 
+router.post('/order/:order_id/review', reviewController.createReviewController);
 export default router;
