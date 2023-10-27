@@ -27,7 +27,29 @@ export const createOrderController = async (req, res) => {
   }
 };
 
-export const getOrderController = async (req, res) => {
+export const getAllOrdersByUserController = async (req, res) => {
+  try {
+    const user_id = req.params.user_id;
+
+    const user = await withPrisma(async (prisma) => {
+      return prisma.users.findUnique({
+        where: {
+          user_id: user_id,
+        },
+        include: {
+          orders: true
+        },
+      });
+    });
+
+    const allOrders = user.orders;
+    res.json(allOrders);
+  } catch (error) {
+    res.status(500).json({ error: `An error occurred ${error}` });
+  }
+};
+
+export const getOneOrderController = async (req, res) => {
   try {
     const order_id = req.params.order_id;
 
@@ -44,6 +66,36 @@ export const getOrderController = async (req, res) => {
     });
 
     res.json(selectedOrder);
+  } catch (error) {
+    res.status(500).json({ error: `An error occurred ${error}` });
+  }
+};
+
+export const updateOrderController = async (req, res) => {
+  try {
+    const order_id = req.params.order_id;
+    const {
+      order_status,
+      date_start,
+      date_end,
+      price,
+      address
+    } = req.body;
+    const updatedOrder = await withPrisma(async (prisma) => {
+      return prisma.orders.update({
+        where: {
+          order_id: order_id,
+        },
+        data: {
+          order_status: order_status,
+          date_start: date_start ? new Date(date_start).toISOString() : undefined,
+          date_end: date_end ? new Date(date_end).toISOString() : undefined,
+          price: price,
+          address: address,
+        },
+      });
+    });
+    res.json(updatedOrder);
   } catch (error) {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
