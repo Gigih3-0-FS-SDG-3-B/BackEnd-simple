@@ -1,24 +1,38 @@
 import { withPrisma } from "../../middlewares/prismaMiddleware.js";
 import { v4 as uuidv4 } from "uuid";
 
-export const createUserController = async (req, res) => {
+export const createCaregiverController = async (req, res) => {
   try {
     const {
-      birth_date,
       first_name,
       last_name,
+      birth_date,
       email,
       password,
       address,
       phone_number,
+      year_experience,
       profile_picture_url,
+      education_id,
     } = req.body;
     const user_id = uuidv4();
+    const caregiver_id = uuidv4();
+
+    const newCaregiver = await withPrisma(async (prisma) => {
+      return prisma.caregivers.create({
+        data: {
+          caregiver_id: caregiver_id,
+          year_experience: year_experience,
+          education_id: education_id,
+        },
+      });
+    });
 
     const newUser = await withPrisma(async (prisma) => {
       return prisma.users.create({
         data: {
           user_id: user_id,
+          caregiver_id: caregiver_id,
           birth_date: new Date(birth_date).toISOString(),
           first_name: first_name,
           last_name: last_name,
@@ -37,19 +51,26 @@ export const createUserController = async (req, res) => {
   }
 };
 
-export const getSingleUserController = async (req, res) => {
+export const getSingleCaregiverDetailController = async (req, res) => {
   try {
-    const user_id = req.params.user_id;
-
-    const selectedUser = await withPrisma(async (prisma) => {
-      return prisma.users.findUnique({
+    const caregiver_id = req.params.caregiver_id;
+    const selectedCaregiver = await withPrisma(async (prisma) => {
+      return prisma.caregivers.findUnique({
         where: {
-          user_id: user_id,
+          caregiver_id: caregiver_id,
+        },
+        include: {
+          users: true,
         },
       });
     });
+    const flattenedCaregiverJSON = {
+      ...selectedCaregiver,
+      ...selectedCaregiver.users,
+    };
+    delete flattenedCaregiverJSON.users;
 
-    res.json(selectedUser);
+    res.json(flattenedCaregiverJSON);
   } catch (error) {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
