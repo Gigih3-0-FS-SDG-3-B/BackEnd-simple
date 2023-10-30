@@ -1,3 +1,4 @@
+// Import necessary modules
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
@@ -11,18 +12,24 @@ app.use(bodyParser.json());
 // Secret key for JWT, keep this secret!
 const secretKey = 'your_secret_key';
 
-// In-memory database for demonstration purposes (replace with a database in a real app).
+// In-memory database for demonstration purposes (replace with a real database in a production app).
 const users = [];
 
-// Middleware to check if a request has a valid JWT token.
+// Middleware to check if a request has a valid JWT token and if the user is an admin.
 function authenticateToken(req, res, next) {
     const token = req.header('Authorization');
     if (!token) return res.status(401).json({ message: 'Access denied' });
 
     jwt.verify(token, secretKey, (err, user) => {
         if (err) return res.status(403).json({ message: 'Invalid token' });
-        req.user = user;
-        next();
+
+        // Check if the user is an admin
+        if (user.isAdmin) {
+            req.user = user;
+            next();
+        } else {
+            res.status(403).json({ message: 'Access denied for non-admin users' });
+        }
     });
 }
 
@@ -37,7 +44,7 @@ app.post('/register', async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = { username, password: hashedPassword };
+        const user = { username, password: hashedPassword, isAdmin: false }; // Default to non-admin
         users.push(user);
         res.status(201).json({ message: 'User registered' });
     } catch (error) {
@@ -53,7 +60,7 @@ app.post('/login', async (req, res) => {
 
     try {
         if (await bcrypt.compare(req.body.password, user.password)) {
-            const token = jwt.sign({ username: user.username }, secretKey);
+            const token = jwt.sign({ username: user.username, isAdmin: user.isAdmin }, secretKey);
             res.json({ token });
         } else {
             res.status(401).json({ message: 'Invalid password' });
@@ -63,9 +70,9 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Protected route that requires a valid token
-app.get('/protected', authenticateToken, (req, res) => {
-    res.json({ message: 'This is a protected route', user: req.user });
+// Protected route that requires admin authorization
+app.get('/adminRoute', authenticateToken, (req, res) => {
+    res.json({ message: 'This is an admin route', user: req.user });
 });
 
 // Export the authenticateToken middleware
