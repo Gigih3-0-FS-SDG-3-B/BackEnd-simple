@@ -23,4 +23,12 @@ router.put('/order/:order_id', orderController.updateOrderController);
 router.post('/order/:order_id/review', reviewController.createReviewController);
 router.get('/service/:service_id/rates',serviceRatesController.getServiceRatesController);
 router.post('/service/:service_id/rates',serviceRatesController.createServiceRatesController);
+
+const {
+    uploadProfilePictureController,
+    uploadProfilePicture,
+} = require('../BackEnd-simple/controllers/Upload image/Image-controler.js'); 
+
+router.post('/uploadProfilePicture', uploadProfilePicture, uploadProfilePictureController);
+
 export default router;
