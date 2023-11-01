@@ -1,4 +1,4 @@
-import { calculateAggregateRating } from "../../repositories/Agregate-rating.js"; 
+import { calculateAggregateRating } from "../../repositories/Agregate-ratingrepository.js"; 
 
 export async function getAggregateRating(req, res) {
   try {
