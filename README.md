@@ -12,6 +12,8 @@
 3. Install package dependencies
     ``` 
     $ npm install
+   ``` 
+    ``` 
     $ npm install multer (FOR middleware multer)
     ```
 4.  Database Setup
