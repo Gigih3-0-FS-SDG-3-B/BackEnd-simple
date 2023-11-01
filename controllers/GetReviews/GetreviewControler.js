@@ -1,4 +1,4 @@
-import { getReviewsForOrder } from "../../repositories/Get-reviews.js"; 
+import { getReviewsForOrder } from "../../repositories/Get-reviewsrepository.js"; 
 
 export async function getReviewsForOrderController(req, res) {
   try {
