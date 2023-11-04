@@ -1,5 +1,9 @@
+// userController.js
 import { withPrisma } from "../../middlewares/prismaMiddleware.js";
 import { v4 as uuidv4 } from "uuid";
+import jwt from 'jsonwebtoken'; // Use the ES module import for jwt
+import bcrypt from 'bcrypt'; // Use the ES module import for bcrypt
+import { authenticateUser } from '../../middlewares/authMiddleware.mjs'; // Assuming authMiddleware is an ES module
 
 export const createUserController = async (req, res) => {
   try {
@@ -31,7 +35,10 @@ export const createUserController = async (req, res) => {
       });
     });
 
-    res.json(newUser);
+    // Generate JWT token with the role
+    const token = jwt.sign({ role: 'user', user_id: user_id }, 'your_secret_key');
+
+    res.json({ user: newUser, token });
   } catch (error) {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
