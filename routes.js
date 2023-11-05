@@ -18,6 +18,8 @@ router.get('/', helloWorldController);
 router.get('/user/:user_id', userController.getSingleUserController);
 router.get('/user/:user_id/orders', orderController.getAllOrdersByUserController);
 router.post('/user', userController.createUserController);
+router.put('/user/:user_id', authenticateUser, userController.updateUserProfileController);
+
 
 router.get('/caregiver/:caregiver_id', caregiverController.getSingleCaregiverDetailController);
 router.post('/caregiver/', caregiverController.createCaregiverController);

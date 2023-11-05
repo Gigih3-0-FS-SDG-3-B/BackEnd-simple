@@ -61,3 +61,24 @@ export const getSingleUserController = async (req, res) => {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
 };
+export const updateUserProfileController = async (req, res) => {
+  try {
+    const userId = req.params.user_id; // Assuming the user_id is passed as a parameter
+    const updatedUserData = req.body; // Assuming updated user data is sent in the request body
+
+    // Perform validation and update user data as needed
+    // Example: You can use Prisma to update the user data
+
+    // For example, using Prisma
+    const updatedUser = await withPrisma(async (prisma) => {
+      return prisma.users.update({
+        where: { user_id: userId },
+        data: updatedUserData,
+      });
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: `An error occurred ${error}` });
+  }
+};
