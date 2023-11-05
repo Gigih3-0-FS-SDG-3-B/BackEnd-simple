@@ -22,6 +22,7 @@ router.put('/user/:user_id', authenticateUser, userController.updateUserProfileC
 
 
 router.get('/caregiver/:caregiver_id', caregiverController.getSingleCaregiverDetailController);
+router.get('/caregivers', caregiverController.filterCaregiversByDateController);
 router.post('/caregiver/', caregiverController.createCaregiverController);
 
 router.get('/order/:order_id', orderController.getOneOrderController);
