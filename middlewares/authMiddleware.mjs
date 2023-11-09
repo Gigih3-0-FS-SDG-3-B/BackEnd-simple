@@ -1,8 +1,6 @@
-// authMiddleware.mjs (note the .mjs file extension for ES Modules)
+
 import jwt from 'jsonwebtoken';
 
-// Secret key for JWT
-const secretKey = 'your_secret_key';
 
 // Middleware to verify JWT token
 const authenticateUser = (req, res, next) => {
@@ -12,11 +10,13 @@ const authenticateUser = (req, res, next) => {
   }
 
   try {
+    const secretKey = process.env.SECRET_KEY;
     const decoded = jwt.verify(token, secretKey);
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid token.' });
+    console.log(error)
+    return res.status(401).json({ message: 'Invalid token.', error: error });
   }
 };
 

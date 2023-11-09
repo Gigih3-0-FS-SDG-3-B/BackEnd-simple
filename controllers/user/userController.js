@@ -1,9 +1,7 @@
-// userController.js
 import { withPrisma } from "../../middlewares/prismaMiddleware.js";
 import { v4 as uuidv4 } from "uuid";
-import jwt from 'jsonwebtoken'; // Use the ES module import for jwt
-import bcrypt from 'bcrypt'; // Use the ES module import for bcrypt
-import { authenticateUser } from '../../middlewares/authMiddleware.mjs'; // Assuming authMiddleware is an ES module
+import { authenticateUser } from '../../middlewares/authMiddleware.mjs';
+import jwt from 'jsonwebtoken';
 
 export const createUserController = async (req, res) => {
   try {
@@ -35,10 +33,7 @@ export const createUserController = async (req, res) => {
       });
     });
 
-    // Generate JWT token with the role
-    const token = jwt.sign({ role: 'user', user_id: user_id }, 'your_secret_key');
-
-    res.json({ user: newUser, token });
+    res.json(newUser);
   } catch (error) {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
@@ -63,21 +58,29 @@ export const getSingleUserController = async (req, res) => {
 };
 export const updateUserProfileController = async (req, res) => {
   try {
-    const userId = req.params.user_id; // Assuming the user_id is passed as a parameter
-    const updatedUserData = req.body; // Assuming updated user data is sent in the request body
+    const userId = req.params.user_id;
+    const updatedUserData = req.body;
 
-    // Perform validation and update user data as needed
-    // Example: You can use Prisma to update the user data
+    // Extract the token from the authorization header
+    const token = req.header('Authorization');
 
-    // For example, using Prisma
-    const updatedUser = await withPrisma(async (prisma) => {
-      return prisma.users.update({
-        where: { user_id: userId },
-        data: updatedUserData,
+    // Verify the token
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: 'Invalid token.' });
+      }
+
+      // Token is valid, continue with the update logic
+      // For example, using Prisma
+      withPrisma(async (prisma) => {
+        const updatedUser = await prisma.users.update({
+          where: { user_id: userId },
+          data: updatedUserData,
+        });
+
+        res.json(updatedUser);
       });
     });
-
-    res.json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: `An error occurred ${error}` });
   }

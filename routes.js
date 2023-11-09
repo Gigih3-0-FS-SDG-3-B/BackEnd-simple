@@ -1,4 +1,4 @@
-// routes.js
+
 import { Router } from 'express';
 import { helloWorldController } from './controllers/testController.js';
 import * as userController from './controllers/user/userController.js';
@@ -8,7 +8,7 @@ import * as reviewController from './controllers/review/reviewController.js';
 import * as serviceRatesController from './controllers/serviceRates/serviceRatesController.js';
 import { authenticateUser, checkAdmin } from './middlewares/authMiddleware.mjs';
 import * as adminController from './controllers/admin/adminController.js'; 
-
+import { loginUserController } from './controllers/user/loginController.js';
 
 
 const router = Router();
@@ -19,6 +19,7 @@ router.get('/user/:user_id', userController.getSingleUserController);
 router.get('/user/:user_id/orders', orderController.getAllOrdersByUserController);
 router.post('/user', userController.createUserController);
 router.put('/user/:user_id', authenticateUser, userController.updateUserProfileController);
+router.post('/login', loginUserController);
 
 
 router.get('/caregiver/:caregiver_id', caregiverController.getSingleCaregiverDetailController);
@@ -35,5 +36,7 @@ router.post('/service/:service_id/rates', serviceRatesController.createServiceRa
 
 // Secure an admin route (e.g., '/admin/some-route') with the checkAdmin middleware
 router.get('/admin/some-route', checkAdmin, adminController.someAdminRoute);
+
+
 
 export default router;
