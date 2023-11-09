@@ -3,7 +3,7 @@
 ## Local Server Setup
 1. Clone project
     ``` 
-    $ git clone https://github.com/Gigih3-0-FS-SDG-3-B/BackEnd-simple.git
+    $ git clone https://github.com/Gigih3-0-FS-SDG-3-B/carepal-be.git
     ```
 2. Open project directory
     ``` 

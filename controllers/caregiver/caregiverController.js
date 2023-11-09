@@ -1,4 +1,5 @@
 import { withPrisma } from "../../middlewares/prismaMiddleware.js";
+import * as reviewRepository from "../../repositories/reviewRepository.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const createCaregiverController = async (req, res) => {
@@ -69,6 +70,12 @@ export const getSingleCaregiverDetailController = async (req, res) => {
       ...selectedCaregiver.users,
     };
     delete flattenedCaregiverJSON.users;
+
+    await reviewRepository.getReviewByCaregiverId(caregiver_id).then((reviews) => {
+      console.log(reviews);
+      flattenedCaregiverJSON.reviews = reviews;
+    });
+
 
     res.json(flattenedCaregiverJSON);
   } catch (error) {

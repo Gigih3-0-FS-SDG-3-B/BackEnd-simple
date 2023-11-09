@@ -25,3 +25,42 @@ export async function createReview(orderId, review, reviewRating) {
     });
   });
 }
+
+export async function getReviewByCaregiverId(caregiverId) {
+  return await withPrisma(async (prisma) => {
+    const orders = await prisma.orders.findMany({
+      where: {
+        caregiver_id: caregiverId,
+      },
+      include: {
+        users: true,
+      },
+    });
+    const orderIds = orders.map((order) => order.order_id);
+    const reviewsData = await prisma.reviews.findMany({
+      where: {
+        order_id: {
+          in: orderIds,
+        },
+      },
+      include: {
+        orders: {
+          include: {
+            users: true,
+          },
+        },
+      },
+    });
+    return reviewsData.map((review) => {
+      const reviewJSON = {
+        ...review,
+        user_id: review.orders.user_id,
+        profile_picture_url: review.orders.users.profile_picture_url,
+        first_name: review.orders.users.first_name,
+        last_name: review.orders.users.last_name,
+      };
+      delete reviewJSON.orders;
+      return reviewJSON;
+    });
+  });
+}

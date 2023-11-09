@@ -4,18 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "nodemon ./index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gigih3-0-FS-SDG-3-B/BackEnd-simple.git"
+    "url": "git+https://github.com/Gigih3-0-FS-SDG-3-B/carepal-be.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Gigih3-0-FS-SDG-3-B/BackEnd-simple/issues"
+    "url": "https://github.com/Gigih3-0-FS-SDG-3-B/carepal-be/issues"
   },
-  "homepage": "https://github.com/Gigih3-0-FS-SDG-3-B/BackEnd-simple#readme",
+  "homepage": "https://github.com/Gigih3-0-FS-SDG-3-B/carepal-be#readme",
   "dependencies": {
     "@prisma/client": "^5.4.2",
     "body-parser": "^1.20.2",
