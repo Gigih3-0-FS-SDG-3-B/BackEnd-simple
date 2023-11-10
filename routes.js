@@ -7,11 +7,6 @@ import * as reviewController from './controllers/review/reviewController.js';
 import * as serviceRatesController from './controllers/serviceRates/serviceRatesController.js';
 import * as eventController from './controllers/Create Event/Create-Event_controler.js'; 
 import * as scheduleController from './controllers/GetSchedule/GetScheduleControler.js';
-import * as aggregateRatingController from './controllers/Agregate/AgregateControler.js'; 
-import * as getReviewsForOrderController from './controllers/Get-review/GetReviewControler.js'; 
-
-const router = Router();
-const ratingController = require("./controllers/Agregate/AgregateControler.js");
 
 router.get("/order/:orderId/rating", ratingController.getAggregateRating);
 
@@ -39,16 +34,10 @@ router.put('/event/:event_id/cancel', eventController.cancelEventController);
 // Rute untuk fungsi create event
 router.post('/event', eventController.createEventController);
 
-// Rute untuk fungsi get review
-router.get('/order/:order_id/reviews', reviewController.getReviewsForOrderController);
 
 // Rute untuk fungsi get schedule
 router.get('/order/:order_id/schedule', scheduleController.getScheduleForOrderController);
 
-// Rute untuk fungsi Review List
-router.get('/reviews', reviewController.getReviewsForOrderController);
 
-// Rute untuk fungsi aggregate rating
-router.get('/order/:order_id/rating', aggregateRatingController.getAggregateRatingController);
 
 export default router;
