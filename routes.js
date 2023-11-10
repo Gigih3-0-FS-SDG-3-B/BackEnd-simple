@@ -1,26 +1,19 @@
-import { Router } from 'express'
+import { Router } from 'express';
 import { helloWorldController } from './controllers/testController.js';
-import * as userController from './controllers/user/userController.js';
-import * as caregiverController from './controllers/caregiver/caregiverController.js';
-import * as orderController from './controllers/order/orderController.js';
-import * as reviewController from './controllers/review/reviewController.js';
-import * as serviceRatesController from './controllers/serviceRates/serviceRatesController.js';
+import userRoutes from './routes/userRoutes.js';
+import caregiverRoutes from './routes/caregiverRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
+import serviceRatesRoutes from './routes/serviceRatesRoutes.js';
 
-const router  = Router();
+const router = Router();
+
 router.get('/', helloWorldController);
 
-router.get('/user/:user_id', userController.getSingleUserController);
-router.get('/user/:user_id/orders', orderController.getAllOrdersByUserController);
-router.post('/user', userController.createUserController);
+router.use('/user', userRoutes);
+router.use('/caregiver', caregiverRoutes);
+router.use('/order', orderRoutes);
+router.use('/review', reviewRoutes);
+router.use('/service-rates', serviceRatesRoutes);
 
-router.get('/caregiver/:caregiver_id', caregiverController.getSingleCaregiverDetailController);
-router.post('/caregiver/', caregiverController.createCaregiverController);
-
-router.get('/order/:order_id', orderController.getOneOrderController);
-router.post('/order', orderController.createOrderController);
-router.put('/order/:order_id', orderController.updateOrderController);
-
-router.post('/order/:order_id/review', reviewController.createReviewController);
-router.get('/service/:service_id/rates',serviceRatesController.getServiceRatesController);
-router.post('/service/:service_id/rates',serviceRatesController.createServiceRatesController);
 export default router;
