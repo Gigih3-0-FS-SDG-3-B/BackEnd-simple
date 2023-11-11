@@ -7,6 +7,11 @@ import * as reviewController from './controllers/review/reviewController.js';
 import * as serviceRatesController from './controllers/serviceRates/serviceRatesController.js';
 import * as eventController from './controllers/Create Event/Create-Event_controler.js'; 
 import * as scheduleController from './controllers/GetSchedule/GetScheduleControler.js';
+import * as aggregateRatingController from './repositories/AgregateRepository.js'; 
+import * as getReviewsForOrderController from './controllers/Get-review/GetReviewControler.js'; 
+import * as ratingController from "./controllers/Agregate/AgregateControler.js"; 
+
+const router = Router();
 
 router.get("/order/:orderId/rating", ratingController.getAggregateRating);
 
@@ -29,15 +34,22 @@ router.get('/service/:service_id/rates', serviceRatesController.getServiceRatesC
 router.post('/service/:service_id/rates', serviceRatesController.createServiceRatesController);
 
 // Rute untuk fungsi cancel event
-router.put('/event/:event_id/cancel', eventController.cancelEventController);
+router.put('/event/:event_id/cancel', eventController.cancelEventController); //done
 
 // Rute untuk fungsi create event
-router.post('/event', eventController.createEventController);
+router.post('/event', eventController.createEventController); // Done
 
+// Rute untuk fungsi get review
+router.get('/order/:order_id/reviews', getReviewsForOrderController.getReviewsForOrderController); // DONE
 
 // Rute untuk fungsi get schedule
-router.get('/order/:order_id/schedule', scheduleController.getScheduleForOrderController);
+// router.get('/order/:order_id/schedule', scheduleController.getScheduleForOrderController); // Tidak ada tabel schedule
 
+// Rute untuk fungsi Review List
+router.get('/reviews', reviewController.getReviewsForOrderController2); // DONE
 
+// Rute untuk fungsi aggregate rating
+router.get('/order/:order_id/rating', aggregateRatingController.calculateAggregateRating); // DONE
 
 export default router;
+
