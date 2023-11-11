@@ -6,12 +6,19 @@ export async function getReviewsForOrder(orderId) {
       where: {
         order_id: orderId,
       },
-      include: {
-        user: true, // Jika Anda ingin menyertakan informasi pengguna yang memberi ulasan
-      },
+      // include: {
+      //   user: true, // Jika Anda ingin menyertakan informasi pengguna yang memberi ulasan
+      // },
     });
   });
 
   return reviews;
 }
 
+export async function getAllReviewsOrder() {
+  const reviews = await withPrisma(async (prisma) => {
+    return prisma.reviews.findMany();
+  });
+
+  return reviews;
+}
