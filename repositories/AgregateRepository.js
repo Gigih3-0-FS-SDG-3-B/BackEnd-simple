@@ -2,33 +2,31 @@ import { withPrisma } from "../middlewares/prismaMiddleware.js";
 
 export async function calculateAggregateRating(orderId) {
   const order = await withPrisma(async (prisma) => {
-    return prisma.orders.findUnique({
+    return prisma.reviews.findMany({
       where: {
         order_id: orderId,
       },
-      include: {
-        reviews: {
-          select: {
-            rating: true,
-          },
-        },
-      },
     });
   });
+
+  console.log(orderId)
+  console.log(order)
 
   if (!order) {
     throw new Error("Order not found");
   }
 
-  const reviews = order.reviews;
+  return order[0].review_rating
 
-  if (!reviews || reviews.length === 0) {
-    return 0; // Jika tidak ada ulasan, rata-rata peringkat adalah 0.
-  }
+  // const reviews = order.review;
 
-  // Menghitung rata-rata peringkat dari ulasan
-  const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-  const averageRating = totalRating / reviews.length;
+  // if (!reviews || reviews.length === 0) {
+  //   return 0; // Jika tidak ada ulasan, rata-rata peringkat adalah 0.
+  // }
 
-  return averageRating;
+  // // Menghitung rata-rata peringkat dari ulasan
+  // const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+  // const averageRating = totalRating / reviews.length;
+
+  // return averageRating;
 }
