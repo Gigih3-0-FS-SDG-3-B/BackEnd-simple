@@ -12,7 +12,7 @@ export const createOrderController = async (req, res) => {
 
 export const getAllOrdersByUserController = async (req, res) => {
   try {
-    const userId = req.params.user_id;
+    const userId = req.query.user_id;
     const allOrders = await getAllOrderByUserId(userId)
     res.json(allOrders);
   } catch (error) {

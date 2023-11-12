@@ -75,3 +75,29 @@ export const getSingleCaregiverDetailController = async (req, res) => {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
 };
+// Function to filter caregivers by date range
+export const filterCaregiversByDateController = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query; // Assuming startDate and endDate are query parameters
+
+    // Use Prisma to query caregivers whose availability falls within the selected date range
+    const caregivers = await withPrisma(async (prisma) => {
+      return prisma.caregivers.findMany({
+        where: {
+          availableDates: {
+            some: {
+              date: {
+                gte: new Date(startDate), // Date should be greater than or equal to startDate
+                lte: new Date(endDate),   // Date should be less than or equal to endDate
+              },
+            },
+          },
+        },
+      });
+    });
+
+    res.json(caregivers);
+  } catch (error) {
+    res.status(500).json({ error: `An error occurred ${error}` });
+  }
+};
