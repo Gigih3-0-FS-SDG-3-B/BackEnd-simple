@@ -1,10 +1,8 @@
-
 import jwt from 'jsonwebtoken';
 
-
-// Middleware to verify JWT token
-const authenticateUser = (req, res, next) => {
-  const token = req.header('Authorization');
+export const authenticateUser = (req, res, next) => {
+  let token = req.header('Authorization');
+  token = token.replace(/^Bearer\s/, '');
   if (!token) {
     return res.status(401).json({ message: 'Access denied. No token provided.' });
   }
@@ -20,13 +18,10 @@ const authenticateUser = (req, res, next) => {
   }
 };
 
-// Middleware to check admin role
-const checkAdmin = (req, res, next) => {
+export const checkAdmin = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next();
   } else {
     return res.status(403).json({ message: 'Access denied. Admin role required.' });
   }
 };
-
-export { authenticateUser, checkAdmin };

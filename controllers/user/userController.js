@@ -1,7 +1,11 @@
 import { withPrisma } from "../../middlewares/prismaMiddleware.js";
 import { v4 as uuidv4 } from "uuid";
-import { authenticateUser } from '../../middlewares/authMiddleware.mjs';
-import jwt from 'jsonwebtoken';
+import { hashPassword } from "../../common/authentication.js";
+import {
+  generateToken,
+  comparePasswords,
+} from "../../common/authentication.js";
+import * as userRepository from "../../repositories/userRepository.js";
 
 export const createUserController = async (req, res) => {
   try {
@@ -18,6 +22,7 @@ export const createUserController = async (req, res) => {
     const user_id = uuidv4();
 
     const newUser = await withPrisma(async (prisma) => {
+      const hashedPassword = await hashPassword(password);
       return prisma.users.create({
         data: {
           user_id: user_id,
@@ -25,7 +30,7 @@ export const createUserController = async (req, res) => {
           first_name: first_name,
           last_name: last_name,
           email: email,
-          password: password,
+          password: hashedPassword,
           address: address,
           phone_number: phone_number,
           profile_picture_url: profile_picture_url,
@@ -56,29 +61,38 @@ export const getSingleUserController = async (req, res) => {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
 };
+
 export const updateUserProfileController = async (req, res) => {
   try {
     const userId = req.params.user_id;
     const updatedUserData = req.body;
+    const updatedUser = await userRepository.updateUser(
+      userId,
+      updatedUserData
+    );
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: `An error occurred ${error}` });
+  }
+};
 
-    // Extract the token from the authorization header
-    // const token = req.header('Authorization');
+export const loginUserController = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await userRepository.getUserByEmail(email);
 
-    // Verify the token
-    // jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-    //   if (err) {
-    //     return res.status(401).json({ message: 'Invalid token.' });
-    //   }
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
 
-    withPrisma(async (prisma) => {
-      const updatedUser = await prisma.users.update({
-        where: { user_id: userId },
-        data: updatedUserData,
-      });
+    const passwordMatch = comparePasswords(password, user.password);
 
-      res.json(updatedUser);
-    });
-    // });
+    if (passwordMatch) {
+      const token = generateToken(user);
+      res.json({ user, token });
+    } else {
+      res.status(401).json({ error: "Incorrect password" });
+    }
   } catch (error) {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
