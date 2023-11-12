@@ -1,5 +1,5 @@
 import { createReview } from "../../repositories/reviewRepository.js";
-import { withPrisma } from "../../middlewares/prismaMiddleware.js";
+
 export const createReviewController = async (req, res) => {
   try {
     const orderId = req.params.order_id;
