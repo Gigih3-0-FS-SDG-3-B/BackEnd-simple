@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as reviewController from '../controllers/review/reviewController.js';
+import { authenticateUser } from '../middlewares/authMiddleware.js';
 
 /**
  * @swagger
@@ -15,6 +16,8 @@ const router = Router();
  *   post:
  *     summary: Create a new review for an order.
  *     tags: [Review]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: order_id
@@ -50,6 +53,6 @@ const router = Router();
  *               review_rating: 4
  *               created_at: '2023-11-12T06:32:32.000Z'
  */
-router.post('/:order_id', reviewController.createReviewController);
+router.post('/:order_id', authenticateUser, reviewController.createReviewController);
 
 export default router;

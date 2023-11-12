@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as orderController from '../controllers/order/orderController.js';
+import { authenticateUser } from '../middlewares/authMiddleware.js';
 
 /**
  * @swagger
@@ -15,6 +16,8 @@ const router = Router();
  *   get:
  *     summary: Get all orders for a user.
  *     tags: [Order]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: user_id
@@ -34,7 +37,7 @@ const router = Router();
  *                 properties:
  *                   // Include properties of each order here
  */
-router.get('/', orderController.getAllOrdersByUserController)
+router.get('/', authenticateUser, orderController.getAllOrdersByUserController)
 
 /**
  * @swagger
@@ -42,6 +45,8 @@ router.get('/', orderController.getAllOrdersByUserController)
  *   get:
  *     summary: Get details of a specific order.
  *     tags: [Order]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: order_id
@@ -140,7 +145,7 @@ router.get('/', orderController.getAllOrdersByUserController)
  *                       type: integer
  *                       example: 10
  */
-router.get('/:order_id', orderController.getOneOrderController);
+router.get('/:order_id', authenticateUser, orderController.getOneOrderController);
 
 /**
  * @swagger
@@ -148,6 +153,8 @@ router.get('/:order_id', orderController.getOneOrderController);
  *   post:
  *     summary: Create a new order.
  *     tags: [Order]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       description: Order data
  *       required: true
@@ -225,7 +232,7 @@ router.get('/:order_id', orderController.getOneOrderController);
  *                     type: integer
  *                   example: [1,2]
  */
-router.post('/', orderController.createOrderController);
+router.post('/', authenticateUser, orderController.createOrderController);
 
 /**
  * @swagger
@@ -233,6 +240,8 @@ router.post('/', orderController.createOrderController);
  *   put:
  *     summary: Update details of a specific order.
  *     tags: [Order]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: order_id
@@ -304,6 +313,6 @@ router.post('/', orderController.createOrderController);
  *                   type: string
  *                   example: '456 Main St, City'
  */
-router.put('/:order_id', orderController.updateOrderController);
+router.put('/:order_id', authenticateUser, orderController.updateOrderController);
 
 export default router;

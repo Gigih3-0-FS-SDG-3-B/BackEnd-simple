@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as caregiverController from '../controllers/caregiver/caregiverController.js';
+import { authenticateUser } from '../middlewares/authMiddleware.js';
 
 /**
  * @swagger
@@ -16,6 +17,8 @@ const router = Router();
  *   get:
  *     summary: Get caregiver details by caregiver ID.
  *     tags: [Caregiver]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: caregiver_id
@@ -27,7 +30,7 @@ const router = Router();
  *       200:
  *         description: Caregiver details
  */
-router.get('/:caregiver_id', caregiverController.getSingleCaregiverDetailController);
+router.get('/:caregiver_id', authenticateUser, caregiverController.getSingleCaregiverDetailController);
 
 
 /**
@@ -36,6 +39,8 @@ router.get('/:caregiver_id', caregiverController.getSingleCaregiverDetailControl
  *   post:
  *     summary: Create a new caregiver.
  *     tags: [Caregiver]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       description: Caregiver data
  *       required: true
@@ -81,6 +86,9 @@ router.get('/:caregiver_id', caregiverController.getSingleCaregiverDetailControl
  *       200:
  *         description: Caregiver created successfully
  */
-router.post('/', caregiverController.createCaregiverController);
+router.post('/', authenticateUser, caregiverController.createCaregiverController);
+
+
+router.get('/', authenticateUser, caregiverController.filterCaregiversByDateController);
 
 export default router;

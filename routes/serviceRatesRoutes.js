@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as serviceRatesController from "../controllers/serviceRates/serviceRatesController.js";
+import { authenticateUser } from "../middlewares/authMiddleware.js";
 
 /**
  * @swagger
@@ -15,6 +16,8 @@ const router = Router();
  *   get:
  *     summary: Get current service rates for a service.
  *     tags: [Service Rates]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: service_id
@@ -35,6 +38,7 @@ const router = Router();
  */
 router.get(
   "/:service_id/rates",
+  authenticateUser,
   serviceRatesController.getServiceRatesController
 );
 
@@ -44,6 +48,8 @@ router.get(
  *   post:
  *     summary: Create new service rates.
  *     tags: [Service Rates]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: service_id
@@ -75,6 +81,7 @@ router.get(
  */
 router.post(
   "/:service_id/rates",
+  authenticateUser,
   serviceRatesController.createServiceRatesController
 );
 
