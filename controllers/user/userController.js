@@ -62,25 +62,23 @@ export const updateUserProfileController = async (req, res) => {
     const updatedUserData = req.body;
 
     // Extract the token from the authorization header
-    const token = req.header('Authorization');
+    // const token = req.header('Authorization');
 
     // Verify the token
-    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ message: 'Invalid token.' });
-      }
+    // jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+    //   if (err) {
+    //     return res.status(401).json({ message: 'Invalid token.' });
+    //   }
 
-      // Token is valid, continue with the update logic
-      // For example, using Prisma
-      withPrisma(async (prisma) => {
-        const updatedUser = await prisma.users.update({
-          where: { user_id: userId },
-          data: updatedUserData,
-        });
-
-        res.json(updatedUser);
+    withPrisma(async (prisma) => {
+      const updatedUser = await prisma.users.update({
+        where: { user_id: userId },
+        data: updatedUserData,
       });
+
+      res.json(updatedUser);
     });
+    // });
   } catch (error) {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
