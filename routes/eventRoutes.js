@@ -51,7 +51,7 @@ const router = Router();
  *               start_date: '1990-01-01T00:00:00Z'
  *               end_date: '1990-01-01T01:00:00Z'
  */
-router.post("/event", authenticateUser, eventController.createEventController);
+router.post("/", authenticateUser, eventController.createEventController);
 
 /**
  * @swagger
@@ -68,16 +68,9 @@ router.post("/event", authenticateUser, eventController.createEventController);
  *         description: The unique identifier of the event to be canceled.
  *         schema:
  *           type: string
- *     responses:
- *       200:
- *         description: Event canceled successfully
- *         content:
- *           application/json:
- *             example:
- *               eventId: 123
  */
 router.delete(
-  "/event/:event_id/cancel",
+  "/:eventId",
   authenticateUser,
   eventController.cancelEventController
 );

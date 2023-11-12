@@ -6,9 +6,9 @@ export async function createEvent(eventData) {
 
     const newEvent = await prisma.events.create({
       data: {
-        caregiver_id,
-        start_date,
-        end_date,
+        caregiver_id: caregiver_id,
+        start_date: new Date(start_date).toISOString(),
+        end_date: new Date(end_date).toISOString(),
       },
     });
 

@@ -19,7 +19,7 @@ router.use('/caregiver', caregiverRoutes);
 router.use('/order', orderRoutes);
 router.use('/review', reviewRoutes);
 router.use('/service', serviceRatesRoutes);
-router.use('/event', eventRoutes);
+router.use('/events', eventRoutes);
 
 router.get('/admin/some-route', checkAdmin, adminController.someAdminRoute);
 
