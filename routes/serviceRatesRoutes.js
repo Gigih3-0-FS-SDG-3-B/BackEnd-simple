@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import * as serviceRatesController from '../controllers/serviceRates/serviceRatesController.js';
+import { Router } from "express";
+import * as serviceRatesController from "../controllers/serviceRates/serviceRatesController.js";
 
 /**
  * @swagger
@@ -27,12 +27,16 @@ const router = Router();
  *         description: Current service rates for the service
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 // Include properties of the current service rates here
+ *              example:
+ *               id: 3
+ *               service_id: 1
+ *               service_price: 294
+ *               created_at: '2023-10-27T18:54:20.307Z'
  */
-router.get('/:service_id/rates', serviceRatesController.getServiceRatesController);
+router.get(
+  "/:service_id/rates",
+  serviceRatesController.getServiceRatesController
+);
 
 /**
  * @swagger
@@ -63,11 +67,15 @@ router.get('/:service_id/rates', serviceRatesController.getServiceRatesControlle
  *         description: Service rates created successfully
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 // Include properties of the created service rates here
+ *              example:
+ *               id: 4
+ *               service_id: 1
+ *               service_price: 100
+ *               created_at: '2023-11-12T06:38:30.941Z'
  */
-router.post('/:service_id/rates', serviceRatesController.createServiceRatesController);
+router.post(
+  "/:service_id/rates",
+  serviceRatesController.createServiceRatesController
+);
 
 export default router;

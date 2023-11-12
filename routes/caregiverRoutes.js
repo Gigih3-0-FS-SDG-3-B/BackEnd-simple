@@ -46,10 +46,10 @@ router.get('/:caregiver_id', caregiverController.getSingleCaregiverDetailControl
  *             properties:
  *               first_name:
  *                 type: string
- *                 example: 'John'
+ *                 example: 'Swagger API'
  *               last_name:
  *                 type: string
- *                 example: 'Doe'
+ *                 example: 'Test'
  *               birth_date:
  *                 type: string
  *                 format: date
@@ -57,7 +57,7 @@ router.get('/:caregiver_id', caregiverController.getSingleCaregiverDetailControl
  *               email:
  *                 type: string
  *                 format: email
- *                 example: 'john.doe@example.com'
+ *                 example: 'swaggerapi@example.com'
  *               password:
  *                 type: string
  *                 example: 'password123'
@@ -75,8 +75,8 @@ router.get('/:caregiver_id', caregiverController.getSingleCaregiverDetailControl
  *                 format: url
  *                 example: 'https://example.com/profile.jpg'
  *               education_id:
- *                 type: string
- *                 example: 'some-education-id'
+ *                 type: int
+ *                 example: 0
  *     responses:
  *       200:
  *         description: Caregiver created successfully

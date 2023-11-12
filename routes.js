@@ -14,6 +14,6 @@ router.use('/user', userRoutes);
 router.use('/caregiver', caregiverRoutes);
 router.use('/order', orderRoutes);
 router.use('/review', reviewRoutes);
-router.use('/service-rates', serviceRatesRoutes);
+router.use('/service', serviceRatesRoutes);
 
 export default router;

@@ -43,10 +43,12 @@ const router = Router();
  *         description: Review created successfully
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 // Include properties of the created review here
+ *             example:
+ *               id: 1
+ *               order_id: '327a7543-c914-416b-ba4f-382901c17168'
+ *               review: 'Great service!'
+ *               review_rating: 4
+ *               created_at: '2023-11-12T06:32:32.000Z'
  */
 router.post('/:order_id', reviewController.createReviewController);
 
