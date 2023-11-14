@@ -17,7 +17,7 @@ export const generateToken = (user) => {
     { user_id: user.user_id, role: user.role },
     secretKey,
     {
-      expiresIn: "2h",
+      expiresIn: "7d",
     }
   );
   return token;

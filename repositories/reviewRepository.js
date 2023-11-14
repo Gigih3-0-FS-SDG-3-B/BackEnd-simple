@@ -25,3 +25,38 @@ export async function createReview(orderId, review, reviewRating) {
     });
   });
 }
+
+export async function getReviewsByOrderId(orderId) {
+  const reviews = await withPrisma(async (prisma) => {
+    return prisma.reviews.findUnique({
+      where: {
+        order_id: orderId,
+      },
+    });
+  });
+
+  return reviews;
+}
+
+export async function getAllReviewsOrder() {
+  const reviews = await withPrisma(async (prisma) => {
+    return prisma.reviews.findMany();
+  });
+  return reviews;
+}
+
+export async function calculateAggregateRating(orderId) {
+  const order = await withPrisma(async (prisma) => {
+    return prisma.reviews.findMany({
+      where: {
+        order_id: orderId,
+      },
+    });
+  });
+
+  if (!order) {
+    throw new Error("Order not found");
+  }
+
+  return order[0].review_rating
+}

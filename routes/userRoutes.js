@@ -100,6 +100,9 @@ router.post('/', userController.createUserController);
  *               password:
  *                 type: string
  *                 example: password123
+ *     responses:
+ *       200:
+ *         description: User created successfully
  */
 router.post('/login', userController.loginUserController);
 
