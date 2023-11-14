@@ -14,22 +14,28 @@ const router = Router();
  * @swagger
  * /review:
  *   get:
- *     summary: Get a review related to an order.
+ *     summary: Get Reviews of a Caregiver or an Order.
  *     tags: [Review]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: order_id
- *         required: true
+ *         required: false
  *         description: Order ID
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: caregiver_id
+ *         required: false
+ *         description: Caregiver ID
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Review created successfully
+ *         description: Reviews retrieved successfully
  */
-router.get('/', authenticateUser, reviewController.getReviewsByOrderIdController)
+router.get('/', authenticateUser, reviewController.getReviewsController)
 
 /**
  * @swagger

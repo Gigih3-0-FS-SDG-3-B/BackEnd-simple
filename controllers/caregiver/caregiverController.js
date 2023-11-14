@@ -75,6 +75,7 @@ export const getSingleCaregiverDetailController = async (req, res) => {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
 };
+
 // Function to filter caregivers by date range
 export const filterCaregiversByDateController = async (req, res) => {
   try {
