@@ -1,5 +1,6 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 
+const PORT = 5000;
 const options = {
     definition: {
         openapi: '3.0.0',
@@ -9,8 +10,8 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:3000/api',
-                description: 'Local Server Port 3000',
+                url: `http://localhost:${PORT}/api`,
+                description: `Local Server Port ${PORT}`,
             },
         ],
         components: {
