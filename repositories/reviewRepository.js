@@ -14,7 +14,6 @@ export async function createReview(orderId, review, reviewRating) {
   if (today > sevenDaysAfterEnd) {
     throw new Error("Review Period has passed");
   }
-
   return await withPrisma(async (prisma) => {
     return prisma.reviews.create({
       data: {
@@ -24,4 +23,39 @@ export async function createReview(orderId, review, reviewRating) {
       },
     });
   });
+}
+
+export async function getReviewsByOrderId(orderId) {
+  const reviews = await withPrisma(async (prisma) => {
+    return prisma.reviews.findUnique({
+      where: {
+        order_id: orderId,
+      },
+    });
+  });
+
+  return reviews;
+}
+
+export async function getCaregiverReviews(caregiverId){
+  const orders = await withPrisma(
+      (prisma) => {
+          return prisma.orders.findMany({
+              where: {
+                  caregiver_id: caregiverId
+              },
+              include: {
+                reviews: true
+              }
+          })
+      }
+  )
+  const reviewRatings = orders.map(review => review.reviews.review_rating);
+  if (reviewRatings.length > 0) {
+    const sum = reviewRatings.reduce((total, rating) => total + rating, 0);
+    const averageRating = sum / reviewRatings.length;
+    return averageRating;
+  } else {
+    return null
+  }
 }
