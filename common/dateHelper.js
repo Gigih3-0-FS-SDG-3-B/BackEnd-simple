@@ -20,6 +20,10 @@ export function explodeDates(inputArray, startDateKey, endDateKey) {
   return resultArray;
 }
 
+function areDatesOverlapping(start1, end1, start2, end2) {
+  return new Date(start1) <= new Date(end2) && new Date(end1) >= new Date(start2);
+}
+
 export function searchAvailableCaregiversHelper(
   caregivers,
   startDate,
@@ -29,19 +33,13 @@ export function searchAvailableCaregiversHelper(
     const conflictingEvents = caregiver.events.some((event) => {
       const eventStartDate = new Date(event.start_date);
       const eventEndDate = new Date(event.end_date);
-      return (
-        (eventStartDate <= endDate && eventEndDate >= startDate) ||
-        (eventEndDate >= startDate && eventStartDate <= endDate)
-      );
+      return areDatesOverlapping(eventStartDate, eventEndDate, startDate, endDate);
     });
 
     const conflictingOrders = caregiver.orders.some((order) => {
       const orderStartDate = new Date(order.date_start);
       const orderEndDate = new Date(order.date_end);
-      return (
-        (orderStartDate <= endDate && orderEndDate >= startDate) ||
-        (orderEndDate >= startDate && orderStartDate <= endDate)
-      );
+      return areDatesOverlapping(orderStartDate, orderEndDate, startDate, endDate);
     });
 
     // The caregiver is available if there are no conflicting events or orders
