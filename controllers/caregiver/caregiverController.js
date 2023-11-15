@@ -1,5 +1,6 @@
 import { withPrisma } from "../../middlewares/prismaMiddleware.js";
 import { v4 as uuidv4 } from "uuid";
+import * as caregiverRepository from "../../repositories/caregiverRepository.js";
 
 export const createCaregiverController = async (req, res) => {
   try {
@@ -76,29 +77,39 @@ export const getSingleCaregiverDetailController = async (req, res) => {
   }
 };
 
-// Function to filter caregivers by date range
-export const filterCaregiversByDateController = async (req, res) => {
+export const getCaregiverScheduleController = async (req, res) => {
   try {
-    const { startDate, endDate } = req.query; // Assuming startDate and endDate are query parameters
-
-    // Use Prisma to query caregivers whose availability falls within the selected date range
-    const caregivers = await withPrisma(async (prisma) => {
-      return prisma.caregivers.findMany({
-        where: {
-          availableDates: {
-            some: {
-              date: {
-                gte: new Date(startDate), // Date should be greater than or equal to startDate
-                lte: new Date(endDate),   // Date should be less than or equal to endDate
-              },
-            },
-          },
-        },
-      });
-    });
-
-    res.json(caregivers);
+    const caregiverId = req.params.caregiver_id
+    const availableDates = await caregiverRepository.getAvailableSchedule(caregiverId);
+    res.json(availableDates);
   } catch (error) {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
 };
+
+// Function to filter caregivers by date range
+// export const filterCaregiversByDateController = async (req, res) => {
+//   try {
+//     const { startDate, endDate } = req.query; // Assuming startDate and endDate are query parameters
+
+//     // Use Prisma to query caregivers whose availability falls within the selected date range
+//     const caregivers = await withPrisma(async (prisma) => {
+//       return prisma.caregivers.findMany({
+//         where: {
+//           availableDates: {
+//             some: {
+//               date: {
+//                 gte: new Date(startDate), // Date should be greater than or equal to startDate
+//                 lte: new Date(endDate),   // Date should be less than or equal to endDate
+//               },
+//             },
+//           },
+//         },
+//       });
+//     });
+
+//     res.json(caregivers);
+//   } catch (error) {
+//     res.status(500).json({ error: `An error occurred ${error}` });
+//   }
+// };

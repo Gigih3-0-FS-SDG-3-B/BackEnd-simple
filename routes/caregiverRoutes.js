@@ -88,7 +88,6 @@ router.get('/:caregiver_id', authenticateUser, caregiverController.getSingleCare
  */
 router.post('/', authenticateUser, caregiverController.createCaregiverController);
 
-
-router.get('/', authenticateUser, caregiverController.filterCaregiversByDateController);
+router.get('/schedule/:caregiver_id', authenticateUser, caregiverController.getCaregiverScheduleController);
 
 export default router;
