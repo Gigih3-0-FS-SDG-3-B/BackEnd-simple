@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gigih3-0-FS-SDG-3-B/BackEnd-simple.git"
+    "url": "git+https://github.com/Gigih3-0-FS-SDG-3-B/carepal-be.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Gigih3-0-FS-SDG-3-B/BackEnd-simple/issues"
+    "url": "https://github.com/Gigih3-0-FS-SDG-3-B/carepal-be.git/issues"
   },
-  "homepage": "https://github.com/Gigih3-0-FS-SDG-3-B/BackEnd-simple#readme",
+  "homepage": "https://github.com/Gigih3-0-FS-SDG-3-B/carepal-be.git#readme",
   "dependencies": {
     "@prisma/client": "^5.4.2",
     "bcrypt": "^5.1.1",
