@@ -10,6 +10,7 @@ import { authenticateUser } from '../middlewares/authMiddleware.js';
  */
 const router = Router();
 
+router.get('/search', authenticateUser, caregiverController.filterCaregiversByDateController);
 
 /**
  * @swagger
