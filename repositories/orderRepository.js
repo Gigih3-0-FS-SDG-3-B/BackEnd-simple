@@ -1,5 +1,6 @@
 import { withPrisma } from "../middlewares/prismaMiddleware.js";
 import { v4 as uuidv4 } from "uuid";
+import { ORDER_STATUS } from "../enums/orderStatusEnum.js";
 
 export async function createOrder(orderData) {
   const newOrder = await withPrisma(async (prisma) => {
@@ -98,6 +99,50 @@ export async function updateOrder(orderId, orderData) {
         date_end: date_end ? new Date(date_end).toISOString() : undefined,
         price: price,
         address: address,
+      },
+    });
+  });
+}
+
+
+// It's not good idea to construct date in repository, but I don't know how to do it in Prisma best practice
+// Ideally, we should do pass the exact date from controller to repository, and do the date comparison in repository
+// The query should be like this:
+// Select * from orders where order_status = 400 and date_start = "2023-11-12"
+export async function getTodayPaymentSuccessVisits() {
+  const today = new Date();
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0).toISOString();
+  const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999).toISOString();
+  return await withPrisma(async (prisma) => {
+    return prisma.orders.findMany({
+      where: {
+        order_status: ORDER_STATUS.PAYMENT_SUCCESS,
+        date_start: {
+          gte: startOfDay,
+          lt: endOfDay
+        }
+      },
+    });
+  });
+}
+
+// It's not good idea to construct date in repository, but I don't know how to do it in Prisma best practice
+// Ideally, we should do pass the exact date from controller to repository, and do the date comparison in repository
+// The query should be like this:
+// Select * from orders where order_status = 500 and date_end = "2023-11-11"
+export async function getOngoingOrdersWithYesterdayEnd() {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const startOfDay = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 0, 0, 0, 0).toISOString();
+  const endOfDay = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate(), 23, 59, 59, 999).toISOString();
+  return await withPrisma(async (prisma) => {
+    return prisma.orders.findMany({
+      where: {
+        order_status: ORDER_STATUS.ON_GOING,
+        date_end: {
+          gte: startOfDay,
+          lt: endOfDay
+        }
       },
     });
   });
