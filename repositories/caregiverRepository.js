@@ -54,9 +54,19 @@ export async function searchAvailableCaregivers(start_date, end_date) {
             },
           },
         },
+        users: true,
       },
     });
   });
-  const availableCaregivers = searchAvailableCaregiversHelper(caregivers, start_date, end_date)
+  let availableCaregivers = searchAvailableCaregiversHelper(
+    caregivers,
+    start_date,
+    end_date
+  );
+  availableCaregivers = availableCaregivers.map((caregiver) => {
+    let object = { ...caregiver, ...caregiver.users };
+    delete object.users;
+    return object;
+  });
   return availableCaregivers;
 }
