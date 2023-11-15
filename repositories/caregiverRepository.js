@@ -70,3 +70,22 @@ export async function searchAvailableCaregivers(start_date, end_date) {
   });
   return availableCaregivers;
 }
+
+export async function getCaregiverDetail(caregiverId) {
+  const selectedCaregiver = await withPrisma(async (prisma) => {
+    return prisma.caregivers.findUnique({
+      where: {
+        caregiver_id: caregiverId,
+      },
+      include: {
+        users: true,
+      },
+    });
+  });
+  const flattenedCaregiverJSON = {
+    ...selectedCaregiver,
+    ...selectedCaregiver.users,
+  };
+  delete flattenedCaregiverJSON.users;
+  return flattenedCaregiverJSON;
+}

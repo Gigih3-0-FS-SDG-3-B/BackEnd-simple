@@ -54,24 +54,11 @@ export const createCaregiverController = async (req, res) => {
 
 export const getSingleCaregiverDetailController = async (req, res) => {
   try {
-    const caregiver_id = req.params.caregiver_id;
-    const selectedCaregiver = await withPrisma(async (prisma) => {
-      return prisma.caregivers.findUnique({
-        where: {
-          caregiver_id: caregiver_id,
-        },
-        include: {
-          users: true,
-        },
-      });
-    });
-    const flattenedCaregiverJSON = {
-      ...selectedCaregiver,
-      ...selectedCaregiver.users,
-    };
-    delete flattenedCaregiverJSON.users;
-
-    res.json(flattenedCaregiverJSON);
+    const caregiverId = req.params.caregiver_id;
+    const selectedCaregiver = await caregiverRepository.getCaregiverDetail(
+      caregiverId
+    );
+    res.json(selectedCaregiver);
   } catch (error) {
     res.status(500).json({ error: `An error occurred ${error}` });
   }
