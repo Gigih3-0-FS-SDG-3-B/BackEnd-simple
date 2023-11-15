@@ -11,7 +11,7 @@ import { updateOrderJob } from "./jobs/orderJob.js";
 
 // Server configuration
 const app = express();
-const port = 3000;
+const PORT = 5000;
 
 // Middleware Registration
 app.use(morgan('combined')); 
@@ -26,7 +26,6 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Cron Job
 cron.schedule('*/10 * * * * *', updateOrderJob);
 
-// Server Activation
-app.listen(port, () => {
-  console.log(`app listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`app listening on port ${PORT}`);
 });

@@ -59,6 +59,16 @@ export async function getOrder(orderId) {
   });
 }
 
+export async function getOrdersByCaregiverId(caregiverId) {
+  return withPrisma(async (prisma) => {
+    return prisma.orders.findMany({
+      where: {
+        caregiver_id: caregiverId
+      },
+    });
+  });
+}
+
 export async function getAllOrderByUserId(userId) {
   const user = await withPrisma(async (prisma) => {
     return prisma.users.findUnique({

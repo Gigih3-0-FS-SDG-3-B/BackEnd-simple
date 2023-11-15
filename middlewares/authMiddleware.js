@@ -2,12 +2,12 @@ import jwt from 'jsonwebtoken';
 
 export const authenticateUser = (req, res, next) => {
   let token = req.header('Authorization');
-  token = token.replace(/^Bearer\s/, '');
   if (!token) {
     return res.status(401).json({ message: 'Access denied. No token provided.' });
   }
-
+  
   try {
+    token = token ? token.replace(/^Bearer\s/, '') : undefined;
     const secretKey = process.env.SECRET_KEY;
     const decoded = jwt.verify(token, secretKey);
     req.user = decoded;

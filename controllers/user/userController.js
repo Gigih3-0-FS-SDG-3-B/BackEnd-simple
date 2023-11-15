@@ -85,11 +85,11 @@ export const loginUserController = async (req, res) => {
       return res.status(401).json({ error: "User not found" });
     }
 
-    const passwordMatch = comparePasswords(password, user.password);
+    const passwordMatch = await comparePasswords(password, user.password);
 
     if (passwordMatch) {
       const token = generateToken(user);
-      res.json({ user, token });
+      res.status(200).json({ user, token });
     } else {
       res.status(401).json({ error: "Incorrect password" });
     }

@@ -12,14 +12,41 @@ const router = Router();
 
 /**
  * @swagger
- * /review/{order_id}:
+ * /review:
+ *   get:
+ *     summary: Get Reviews of a Caregiver or an Order.
+ *     tags: [Review]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: order_id
+ *         required: false
+ *         description: Order ID
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: caregiver_id
+ *         required: false
+ *         description: Caregiver ID
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Reviews retrieved successfully
+ */
+router.get('/', authenticateUser, reviewController.getReviewsController)
+
+/**
+ * @swagger
+ * /review:
  *   post:
  *     summary: Create a new review for an order.
  *     tags: [Review]
  *     security:
  *       - bearerAuth: []
  *     parameters:
- *       - in: path
+ *       - in: query
  *         name: order_id
  *         required: true
  *         description: Order ID
@@ -53,6 +80,6 @@ const router = Router();
  *               review_rating: 4
  *               created_at: '2023-11-12T06:32:32.000Z'
  */
-router.post('/:order_id', authenticateUser, reviewController.createReviewController);
+router.post('/', authenticateUser, reviewController.createReviewController);
 
 export default router;
