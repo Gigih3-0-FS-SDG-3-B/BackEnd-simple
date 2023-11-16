@@ -1,13 +1,13 @@
-# BackEnd-simple
+# Carepal-BE
 
 ## Local Server Setup
 1. Clone project
     ``` 
-    $ git clone https://github.com/Gigih3-0-FS-SDG-3-B/BackEnd-simple.git
+    $ git clone https://github.com/Gigih3-0-FS-SDG-3-B/carepal-be.git
     ```
 2. Open project directory
     ``` 
-    $ cd {{PROJECT DIRECTORY NAME}}
+    $ cd carepal-be
     ```
 3. Install package dependencies
     ``` 
@@ -16,7 +16,9 @@
 4.  Database Setup
     -   Setup Env
 
-        First, copy **.env.example** to **.env** and then change several things for app configuration:
+        First, copy **.env.example** to **.env** and then change several things for app configuration.
+
+        Make sure to fill DATABASE_URL as it would be used for the next steps.
         ```
         DATABASE_URL=mysql://{{USER}}:{{PASSWORD}}@{{HOST}}:{{PORT}}/{{DATABASE}}
         ```
@@ -38,6 +40,15 @@
     ```
     nodemon index.js
     ```
+
+## API Documentation
+
+Swagger UI Self Hosted URL:
+```
+localhost:5000/api/docs
+```
+Or available at [Postman Public Documention](
+https://documenter.getpostman.com/view/25063333/2s9YXo2L5S)
 
 ## References
 1.  https://www.prisma.io/docs/getting-started/setup-prisma/add-to-existing-project/relational-databases-typescript-postgresql
