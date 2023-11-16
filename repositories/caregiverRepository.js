@@ -2,8 +2,9 @@ import { withPrisma } from "../middlewares/prismaMiddleware.js";
 import * as eventRepository from "./eventRepository.js";
 import * as orderRepository from "./orderRepository.js";
 import { explodeDates } from "../common/dateHelper.js";
-import { eachDayOfInterval, format } from "date-fns";
+import { eachDayOfInterval, format, addDays} from "date-fns";
 import { searchAvailableCaregiversHelper } from "../common/dateHelper.js";
+import { advanceNoticePeriod } from "../enums/scheduleEnum.js";
 
 export async function getAvailableSchedule(caregiverId) {
   const orders = await orderRepository.getOrdersByCaregiverId(caregiverId);
@@ -16,7 +17,7 @@ export async function getAvailableSchedule(caregiverId) {
   );
   const unavailableDates = orderAccrualDates.concat(eventsAccrualDates).sort();
 
-  let startDate = new Date();
+  let startDate = addDays(new Date(), advanceNoticePeriod);
   let endDate = new Date();
   endDate.setFullYear(endDate.getFullYear() + 1);
   let allDates = eachDayOfInterval({ start: startDate, end: endDate });
