@@ -37,25 +37,27 @@ export async function getReviewsByOrderId(orderId) {
   return reviews;
 }
 
-export async function getCaregiverReviews(caregiverId){
-  const orders = await withPrisma(
-      (prisma) => {
-          return prisma.orders.findMany({
-              where: {
-                  caregiver_id: caregiverId
-              },
-              include: {
-                reviews: true
-              }
-          })
-      }
-  )
-  const reviewRatings = orders.map(review => review.reviews.review_rating);
+export async function getCaregiverReviews(caregiverId) {
+  const orders = await withPrisma((prisma) => {
+    return prisma.orders.findMany({
+      where: {
+        caregiver_id: caregiverId,
+      },
+      include: {
+        reviews: true,
+      },
+    });
+  });
+  console.log(orders);
+  const reviewRatings = orders
+    .filter((order) => order.reviews !== null)
+    .map((review) => review?.reviews?.review_rating);
+  console.log(reviewRatings);
   if (reviewRatings.length > 0) {
     const sum = reviewRatings.reduce((total, rating) => total + rating, 0);
     const averageRating = sum / reviewRatings.length;
     return averageRating;
   } else {
-    return null
+    return null;
   }
 }
