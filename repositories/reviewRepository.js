@@ -48,16 +48,13 @@ export async function getCaregiverReviews(caregiverId) {
       },
     });
   });
-  console.log(orders);
-  const reviewRatings = orders
-    .filter((order) => order.reviews !== null)
-    .map((review) => review?.reviews?.review_rating);
-  console.log(reviewRatings);
+  const orderWithReviews =  orders.filter((order) => order.reviews !== null)
+  const reviews = orderWithReviews.map((order) => order?.reviews);
+  const reviewRatings = reviews.map((review) => review?.review_rating);
+  let averageRating = null;
   if (reviewRatings.length > 0) {
     const sum = reviewRatings.reduce((total, rating) => total + rating, 0);
-    const averageRating = sum / reviewRatings.length;
-    return averageRating;
-  } else {
-    return null;
+    averageRating = sum / reviewRatings.length;
   }
+  return { reviews, averageRating };
 }
