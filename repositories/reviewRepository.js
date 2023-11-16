@@ -1,6 +1,7 @@
 import { withPrisma } from "../middlewares/prismaMiddleware.js";
 import { getOrder } from "./orderRepository.js";
 import { REVIEW_PERIOD_DAYS_AFTER_CHECKOUT } from "../enums/reviewEnum.js";
+import { flatten } from "flat";
 
 export async function createReview(orderId, review, reviewRating) {
   const order = await getOrder(orderId);
@@ -45,11 +46,17 @@ export async function getCaregiverReviews(caregiverId) {
       },
       include: {
         reviews: true,
+        users: true,
       },
     });
   });
-  const orderWithReviews =  orders.filter((order) => order.reviews !== null)
-  const reviews = orderWithReviews.map((order) => order?.reviews);
+  const orderWithReviews = orders.filter((order) => order.reviews !== null);
+  const reviews = orderWithReviews.map((order) => {
+    return flatten(
+      { ...order?.reviews, user: order?.users },
+      { delimiter: "_" }
+    );
+  });
   const reviewRatings = reviews.map((review) => review?.review_rating);
   let averageRating = null;
   if (reviewRatings.length > 0) {
